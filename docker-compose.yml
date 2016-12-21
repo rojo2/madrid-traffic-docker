@@ -1,0 +1,20 @@
+version: '2'
+services:
+  api:
+    image: node:latest
+    ports:
+    - "3002"
+    links:
+    - mongo
+    volumes:
+    - ../api:/root
+    command: /bin/bash -c "(cd /root && npm run start:docker)"
+  front:
+    image: node:latest
+    ports:
+    - "3000"
+    volumes:
+    - ../front:/root
+    command: /bin/bash -c "(cd /root && npm run start:docker)"
+  mongo:
+    image: azazeln28/madrid-traffic-data:latest
