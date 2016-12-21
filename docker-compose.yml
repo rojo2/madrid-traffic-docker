@@ -1,20 +1,35 @@
 version: '2'
 services:
+  mongo:
+    networks:
+      madrid:
+        ipv4_address: 172.25.0.4
+    image: azazeln28/madrid-traffic-data:latest
   api:
+    networks:
+      madrid:
+        ipv4_address: 172.25.0.3
     image: node:latest
     ports:
-    - "3002"
+    - "3002:3002"
     links:
     - mongo
     volumes:
     - ../api:/root
     command: /bin/bash -c "(cd /root && npm run start:docker)"
   front:
+    networks:
+      madrid:
+        ipv4_address: 172.25.0.2
     image: node:latest
     ports:
-    - "3000"
+    - "3000:3000"
     volumes:
     - ../front:/root
     command: /bin/bash -c "(cd /root && npm run start:docker)"
-  mongo:
-    image: azazeln28/madrid-traffic-data:latest
+networks:
+  madrid:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.25.0.0/24
